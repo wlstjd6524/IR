@@ -16,22 +16,22 @@
   <!-- 팀원 이미지 Table-->
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/a9befe05-0cb9-4e0c-ba1f-43b4275ce55e" width="150">    <!--이진성-->
+      <img src="https://github.com/user-attachments/assets/a9befe05-0cb9-4e0c-ba1f-43b4275ce55e" width="130">    <!--이진성-->
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/35c220cf-9b00-4e9a-a3e9-0e2e3e2318b7" width="120">    <!--고아연-->
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/89342c37-c1f9-4fcf-9ef9-a9fc032a807f" width="105">    <!--김재현-->
+      <img src="https://github.com/user-attachments/assets/89342c37-c1f9-4fcf-9ef9-a9fc032a807f" width="125">    <!--김재현-->
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/21d5ac6e-c2c9-47a8-867a-7cb362f05973" width="110">    <!--박성재-->
+      <img src="https://github.com/user-attachments/assets/21d5ac6e-c2c9-47a8-867a-7cb362f05973" width="120">    <!--박성재-->
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/e10fba61-2421-4bca-b470-506f854fa909" width="105">    <!--배준서-->
+      <img src="https://github.com/user-attachments/assets/e10fba61-2421-4bca-b470-506f854fa909" width="115">    <!--배준서-->
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/10778e56-ea3c-4e64-8204-3ab5a5d2df36" width="105">    <!--윤소정-->
+      <img src="https://github.com/user-attachments/assets/10778e56-ea3c-4e64-8204-3ab5a5d2df36" width="115">    <!--윤소정-->
     </td>
   </tr>
 
