@@ -93,38 +93,28 @@
 </table>
 
 ## 📺 Presentation
-[발표자료](https://github.com/user-attachments/files/26978271/LLM.Project.1.pptx)
+[발표자료](https://github.com/user-attachments/files/27000298/IR1._.pptx)
 
 
 ## 📂 ReadME Index 
-[📄 Executive Summary (프로젝트 개요)](#executive-summary) <br>
+[🎯 Project Overview (프로젝트 개요 및 목표)](#project-overview) <br>
 
-[🏗️ System Architecture (시스템 설계 및 구조)](#system-architecture) <br>
+[📊 Experimental Setup & Data Pipeline (실험 환경 및 데이터 파이프라인)](#experimental-setup) <br>
 
-[📱 Demo & UI (서비스 구현 화면)](#demo-ui) <br>
+[🧪 Key Experiments & Methodology (핵심 실험 및 방법론)](#key-experiments) <br>
 
-[🛠️ Core Pipelines & Implementation (핵심 구현 파이프라인)](#core-pipelines) <br>
-
-[🚀 Troubleshooting & Optimization (문제 해결 및 최적화)](#troubleshooting) <br>
+[🚀 Results & Optimization (결과 분석 및 최적화 과정)](#results-optimization) <br>
 
 [👥 Team Leadership & Management (팀 리더십 및 협업)](#team-leadership) <br>
 
 [📈 Retrospective & Future Work (회고 및 향후계획)](#retrospective)
 
 
-<a id="executive-summary"></a>
+<a id="project-overview"></a>
 
-## 📄 Executive Summary
-### 📌 Background
-  - 글로벌 규제 강화 : 최근 글로벌 ESG 공시 의무화로 인해 기업 실무진이 대응해야 할 가이드라인이 방대해지고 있습니다.
-  - 수작업의 한계 : 사람이 복잡한 계산식과 수만 개의 배출 계수를 직접 계산하거나, 규제 변화가 빠르게 이루어지면서 매년 개정되는 다양한 인증 기준과 법령이 존재하여 매번 개정되는 자료를 찾아보면서 발생하는 계산 오류 리스크와 업무 지연이 핵심 페인포인트 입니다.
-  - 지능형 솔루션의 필요성 : 이런 문제를 해결함과 동시에 단순 키워드 검색을 넘어 문맥을 파악하고 정형/비정형 데이터를 통합 처리하는 자동화 솔루션이 필수적입니다.
+## 🎯 Project Overview
+### 프로젝트 배경
 
-### 🎯 Objective
-  - 도메인 특화 에이전트 구축 : `LangChain` 및 `LangGraph` 를 활용하여 ESG 도메인 지식을 정확히 이해하고 태스크를 수행하는 Agent Architecture 설계.
-  - 신뢰성 확보 : 할루시네이션을 최소하기 위해 `RAG 파이프라인`과 정밀한 수치 계산 및 여러가지 분석 도구(CustomTool)를 연동.
-  - 확장성 및 운영 안정성 확보 : 각 Custom Tool 의 독립성을 보장하여 단일 모듈 장애가 전체 시스템으로 전파되는 것을 방지하고, 실시간 로그 추적 미들웨어 및 'LLM Judge' 를 도입하여 지속적인 성능 모니터링과 유지보수가 가능한 파이프라인 설계.
-  - 실무 활용성 기대 : ESG 도메인에 맞는 계산식 도구 또는 법령 검색, 지배구조 벤치마킹 등 실무자에게 즉각적인 도움을 주는 PipeLine 구현.
 
 ### 🔧 Tech Stack
 | Category | Tech Stack |
@@ -136,18 +126,10 @@
 | **Tools & API** | Tavily API (Web Search), OpenDartReader |
 | **Monitoring & UI** | LangSmith (Tracing), Gradio (Prototype UI) |
 
-<a id="system-architecture"></a>
+<a id="experimental-setup"></a>
 
-## 🏗️ System Architecture
-<img width="8192" height="5488" alt="Image" src="https://github.com/user-attachments/assets/17734813-7f81-4873-9ebe-5a90cf9b9e32" /> <br>
-### System WorkFlow 요약
-본 프로젝트는 기업의 지속가능경영 공시 대응을 지원하기 위해 내부 지식(RAG)과 외부 실시간 정보(Web Search)를 결합한 하이브리드 지능형 에이전트 시스템입니다.
+## 📊 Experimental Setup & Data Pipeline
 
-### 핵심 설계 전략
-1. Hybrid Data Ingestion : 내부 가이드라인(PDF)과 배출 계수 데이터(CSV)를 수집하여 `Vector DB` 와 `RDB` 에 각각 구조화합니다 . 특히 최신 규제 및 뉴스 대응 그리고 매일 바뀌는 환율 분석을 위해 실시간 `Web Search(Tavily API)` 파이프라인을 통합하여 RAG의 정보 최신성 한계를 보완했습니다.
-2. Context Optimization & Routing : 사용자 질문이 입력되면 `Context Summarizer(Middleware)` 가 대화 기록을 분석하여 토큰 비용을 최적화하고 , `Semantic Router` 가 발화 의도를 일상 대화와 ESG 전문 태스크로 정밀하게 분기합니다.
-3. Agentic Workflow : ReAct 아키텍처 기반의 에이전트가 질문 해결에 최적화된 도구(RAG, Web Search, 계산기 등)를 자율적으로 선택하여 수행합니다.
-4. Backend Monitoring & Maintenance : 모든 추론 로그는 실시간으로 기록되며, 시스템의 지속적인 고도화를 위해 Custom LLM Judge가 백엔드에서 답변의 기술적 타당성을 평가합니다. 이는 사용자 응답 속도에 영향을 주지 않으면서도, 파이프라인별 유지보수 우선순위를 결정하는 핵심 지표로 활용됩니다.
 
 ### 🏆 Key Contributions (개인 기여 파이프라인)
 | **Category** | Details |
@@ -157,37 +139,15 @@
 | **Custom Tools** | Carbbon Emission Calculator(탄소 배출 계산기), Security Compliance Checklist(정보 보호 인증 규정 분석) |
 | **Data Engineering** | CustomTool 에 필요한 실무 데이터(정형/비정형) 수집 및 LLM 이 학습을 진행할 때 효율을 높이기 위한 표준 컬럼 매핑 전처리 |
 
-<a id="demo-ui"></a>
 
-## 📱 Demo & UI
-<img width="1493" height="875" alt="Image" src="https://github.com/user-attachments/assets/3f2072de-00ec-48aa-bad2-5f9a1e9017fc" /> <br> <br>
-<img width="1492" height="179" alt="Image" src="https://github.com/user-attachments/assets/4289a11a-bc8a-4359-af08-347ae422724e" />
+<a id="key-experiments"></a>
 
-<a id="core-pipelines"></a>
+## 🧪 Key Experiments & Methodology
 
-## 🛠️ Core Pipelines & Implementation
-본 섹션은 Key Contributions 을 기반으로 시스템의 두뇌 역할을 하는 의도 분석(Router), 도메인 지식이 집약된 도구 설계(Custom Tool), 그리고 데이터 기반의 품질 검증(LLM Judge) 파이프라인을 중심으로 구성되었습니다.
 
-1. 지능형 시맨틱 라우터 (Semantic RouteR)
-    - 의도 기반 트래픽 제어 : 사용자의 입력 즉시 LLM(Solar-Pro) 이 의도를 분석하여 'ESG 전문 태스크' 와 '일상 대화' 로 분기하는 최상위 라우터 노드를 설계했습니다.
-    - 확정적 출력 제어 : `Pydantic` 과 `with_structured_output` 을 결합하여 에이전트가 호출할 도구와 파라미터를 JSON 형태로 확정 반환하도록 강제했습니다. 이를 통해 불필요한 도구 탐색 과정을 생략하여 <b>토큰 소모를 절감하고 응답지연을 최적화</b> 했습니다.
-    - 상태 관리의 유연성 : `LangGraph` 의 `StateGraph` 구조를 활용해 에이전트 상태를 관리함으로써, 기능 노드 간 결합도를 낮추고 새로운 도구나 파이프라인을 즉시 통합할 수 있는 확장성을 확보했습니다.
+<a id="results-optimization"></a>
 
-2. 데이터 중심 Custom Tool 설계 및 프롬프트 가드레일
-    - 데이터 무결성 전처리 : LLM이 배출 계수와 규ㅠ정 조항을 정확히 참조할 수 있도록, 수집된 정형 데이터에서 불필요한 컬럼을 제거하고 <b>표준 컬럼 매핑</b> 을 수행하는 전처리 파이프라인을 구축했습니다.
-    - 할루시네이션 차단 설계
-      - 강제적 도구 연쇄 : 함수 내부 독스트링에 <b>반드시 DB에서 계수를 먼저 조회하고 연산을 수행해라</b> 라는 행동 지침을 명시하여, 모델이 임의로 숫자를 날조하는 것을 원천 차단했습니다.
-      - 추측금지 가드레일 : 결과값이 없을 경우 자의적인 숫자 생성을 절대 금지하고, 내부 도구명이나 파라미터 구조가 사용자에게 노출되지 않도록 <b>보안 및 데이터 은닉</b> 프롬프트를 적용했습니다.
-    - 응답 포맷 표준화 : 답변 형식을 "[1단계: 상태분석] -> [2단계: 추가 정보 안내] -> [3단계: 다음 단계]"의 블록 형식으로 고정하여 일관된 UX 를 제공했습니다.
-
-3. 자동화 답변 성능 평가 시스템 (LLM Judge)
-    - 정량적 실험 체계 : 사전 구축된 평가 데이터셋을 활용하여, 파이프라인 로직 변경 시 답변 품질의 변화를 정량적으로 추적했습니다.
-    - 전문가 페르소나 채점 : 추론 능력이 뛰어난 모델에 <b>엄격한 ESG 컨설팅 전문가</b> 페르소나를 부여하여, 단순 키워드 매칭이 아니라 숫자 연산의 논리적 타당성과 도메인 적합성을 자동 채점하도록 설계했습니다.
-    - 무관용 평가 : 모호한 점수체가 아닌 <b>'통과(1점) / 실패(0점)'</b>의 2진 분류 방식을 적용했습니다. 숫자 연산 오류나 도메인 개념상 분류 미비 시 즉시 실패로 판정하여, 실무 배포 전 및 서비스가 배포되더라도 결함을 지속적, 보수적으로 필터링하는 파이프라인 피드백 루프를 구축했습니다.
-
-<a id="troubleshooting"></a>
-
-## 🚀 Troubleshooting & Optimization
+## 🚀 Results & Optimization
 ### 1. 전문 도메인(ESG) 데이터 수집 및 데이터 스키마 설계의 한계 극복
 #### 문제 정의
 ESG는 글로벌 공시 규제와 법률적 전문성이 요구되는 생소한 도메인으로, 신뢰성 있는 학습/참조 데이터를 확보하는데 어려움이 있었습니다. 특히 글로벌 대응을 위해 해외 전문 자료를 파싱해야 하는 과정에서 데이토 소스의 불일치 문제가 발생했습니다.
