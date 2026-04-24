@@ -210,6 +210,7 @@
 
 ## 🧪 Final SOTA Architecture & Result
 수많은 실험 끝에 도달한 최종 파이프라인 (실험-8번)은 검색 엔진의 한계와 LLM의 불안정성을 상호 보완하도록 설계된 지능형 RAG 아키텍처 입니다. <br>
+
 <img width="2816" height="1536" alt="Image" src="https://github.com/user-attachments/assets/aa4040b3-88b0-477d-8bf9-71469221c1a4" /> <br>
 
 ### 1. 지능형 라우터
