@@ -148,7 +148,7 @@
 | **LLM & Embedding - Reranking** | BAAI/bge-reranker-v2-m3 (Cross-Encoder) |
 | **Data Analysis** | Pandas, Numpy, Scikit-learn |
 | **Environment** | Ubuntu OS, Local GPU Server(CUDA - RTX3070) |
-| **Collaboration & DevOps** | Slack, Zoom |
+| **Collaboration** | Slack, Zoom |
 
 <a id="data-analysis"></a>
 
