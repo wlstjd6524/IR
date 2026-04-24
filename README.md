@@ -103,7 +103,30 @@
 
 [🚀 Experimental Progression (실험 과정 및 빌드업)](#experimental-progression) <br>
 
-[🧪 Final SOTA Architecture (핵심 실험 및 최종 아키텍처)](#final-sota-architecture) <br>
+[🧪 Final SOTA Architecture & Result (핵심 실험과 최종 아키텍처 및 최종결과 <a href="https://github.com/sungjae3911-arch"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/></a>  <!--박성재-->
+    </td>
+    <td align="center">
+      <a href="https://github.com/jun-01111"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/></a>         <!--배준서-->
+    </td>
+    <td align="center">
+      <a href="https://github.com/Lucia128"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/></a>          <!--윤소정-->
+    </td>
+  </tr>
+
+</table>
+
+## 📺 Presentation
+[발표자료](https://github.com/user-attachments/files/27000298/IR1._.pptx)
+
+
+## 📂 ReadME Index 
+[🎯 Project Overview (프로젝트 개요 및 목표)](#project-overview) <br>
+
+[📊 Data Analysis & Hypothesis (데이터 분석 및 실험 방향성 설정)](#data-analysis) <br>
+
+[🚀 Experimental Progression (실험 과정 및 빌드업)](#experimental-progression) <br>
+
+[🧪 Final SOTA Architecture & Result (핵심 실험과 최종 아키텍처 및 최종결과)](#final-sota-architecture) <br>
 
 [🛠️ Troubleshooting & Engineering (문제 해결 및 인프라 안정화)](#troubleshooting-engineering) <br>
 
@@ -138,11 +161,11 @@
 
 ---
 
-### Insight 2. 형태소 분석기(KiWi) 선택과 '의미 역전' 방지 가설
+### Insight 2. 지식 베이스 내 중복 및 유사 데이터 처리
 <img width="686" height="235" alt="Image" src="https://github.com/user-attachments/assets/163cec70-9a44-4e47-aca5-93bae5e3ab8c" /> <br>
 
-- 분석 : 질문 데이터 분석 중, "~~ 하지 않는 이유" 와 같은 핵심 부정 문구를 일반적인 분석기로 처리할 경우, 핵심 의미인 "부정" 이 누락되어 정반대의 문서를 검색할 수 있겠다는 리스크를 생각해봤습니다.
-- 실험 방향 : 한국어 특화 형태소 분석기로 널리 알려져 있는 `Kiwi` 를 채택해서 사용해보기로 했습니다. 단순 토큰화를 넘어 `Stoptags` 를 정밀하게 제어하고, 전문 용어 및 부정형 표현이 훼손하지 않도록 사전 튜닝을 거치는 전처리 요소를 가져가면 좋겠다고 생각이 들어 다음과 같은 방향을 설정했습니다.
+- 분석 : 전체 문서를 Table 형태로 뽑아서 비교해 본 결과, 전체 데이터에서 내용이 거의 동일하거나 오타로 인해 중복 생성된 데이터가 다수 존재함을 발견했습니다. 이러한 중복 데이터가 존재할 경우, 검색기가 유사한 문서 여러 개를 동시에 상위권에 올리게 되어 LLM의 컨텍스트 창을 낭비하고 결과적으로 답변에 생성에 필요한 다른 유익한 정보들이 누락되는 현상이 발생 할 수 있다고 생각했습니다.
+- 실험 방향 : 중복 문서를 식별하여 하나로 그룹화하거나 검색 결과에서 상위 K개 내에 중복된 내용이 들어 오지 않도록 제어 로직을 구성해야 겠다는 필요성을 도출했습니다.
 
 ---
 
@@ -150,7 +173,13 @@
 <img width="790" height="490" alt="Image" src="https://github.com/user-attachments/assets/eb659f22-40de-47fe-8189-bba0c8ad18b1" /> <br>
 
 - 분석 : 4,272개의 문서의 길이를 EDA 해본 결과, 대부분의 문서가 특정 글자 수(약 200~400자) 구간에 집중되어 있고 하나의 문서가 곧 압축된 하나의 지식 단위임을 파악했습니다.
-- 실험 방향 : 무분별한 문서 쪼개기(Chunking)는 오히려 유사도 랭킹을 꼬이게 만드는 'Top-K 밀림현상' 을 초래할 수 있다는 생각과 이에 따라 <b>문맥을 온전히 유지하는 원문 중심의 검색 전략</b>을 메인으로 테스트 해보기로 결정했습니다.
+- 실험 방향 : 무분별한 문서 쪼개기(Chunking)는 오히려 유사도 랭킹을 꼬이게 만드는 'Top-K 밀림현상' 을 초래할 수 있다는 생각과 시스템 리소스만 낭비할 수 있겠다 라는 생각을 하게되었습니다. 따라서, 원문을 쪼개지 않고 전체를 색인해서 <b>재현율(Recall) 을 극대화 하고 리소스를 줄여보자</b> 라는 전략을 세워보려고 했습니다.
+
+---
+
+### Insight 4. 형태소 분석기(KiWi) 기반의 정밀 토큰화 전략
+- 분석 : "~~ 하지 않는 이유" 와 같은 핵심 부정 문구가 일반적인 분석기에서 "이유" 로만 토큰화되어 검색 결과가 정반대로 나오는 리스크를 확인했습니다.
+- 실험 방향 : 한국어 특화 분석기인 `Kiwi` 를 채택하고, 전문 용어 및 부정형 표현이 훼손하지 않도록 `Stoptags` 를 정밀하게 제어하는 전처리 실험을 진행하고자 했습니다.
 
 
 <a id="experimental-progression"></a>
@@ -158,7 +187,7 @@
 ## 🚀 Experimental Progression
 높은 평가지표 Score 를 달성하기 위해, 총 12단계의 점진적인 실험을 거치며 검색 성능과 시스템 안정성을 고도화 했습니다.
 
-### Phase 1. 기초 환경 구축 및 할루시네연 제어
+### Phase 1. 기초 환경 구축 및 할루시네이션 제어
 - 초기 구축 : 기본적인 Vector DB 와 LLM 을 연동한 RAG 형태의 베이스라인 파이프라인을 구축했습니다.
 - Self-Correction (자가검증) 도입 : 초기 모델이 검색된 문서를 무시하고 자신의 내재 지식으로 답변을 지어내는 할루시네이션 현상을 발견했습니다. 따라서 이를 제어하기 위해 프롬프트 단어에 '반드시 제공된 문서에 기반하여 답변을 스스로 검증하라' 는 Self-Correction 로직을 추가하여 답변의 신뢰도를 확보했습니다.
 
@@ -172,14 +201,14 @@
 
 ### Phase 3. 팀 내 SOTA Score 달성 및 한계 돌파 탐색
 - Model Edit : 이전 단계의 최적화 로직들을 결합하고, 백본 언어 모델 및 임베딩/리랭커 모델의 조합을 최적화한 8번째 실험에서 "최종 1위 스코어" 를 달성했습니다.
-- 성능 한계 돌파를 위한 추가 탐색 : SOTA 달성 이후에도 검색 품질을 더 높이기 위해 동적 문서 추출(Dynamic K), 한국어 특화 임베딩(Solar), 다중 질의 확장(Multi-Query) 등 다양한 변인을 통제하며 추가 실험을 진행했습니다.
+- 성능 한계 돌파를 위한 추가 탐색 : SOTA 달성 이후에도 검색 품질을 더 높이기 위해 동적 문서 추출(Dynamic K), 한국어 특화 임베딩(Solar), 다중 질의 확장(Multi-Query), RRF 가중치를 1:1 이 아닌 2:1, 1:2 처럼 여러가지 가중치 부여 등 다양한 변인을 통제하며 추가 실험을 진행했습니다.
 - LLM-as-a-Junge 구축 : 대회 플랫폼의 1일 제출 횟수 제한이라는 병목을 극복하기 위해, LLM 이 직접 검색된 문서와 생성된 답변의 관련성을 채점하는 로컬 평가 시스템(Judge)을 자체 구축하여 실험의 사이클을 가속화했습니다. 
 
 
 <a id="final-sota-architecture"></a>
 
-## 🧪 Final SOTA Architecture
-수많은 실험 끝에 도달한 최종 파이프라인 (실험-8번)은 검색 엔진의 한계와 LLM의 불안정성을 상호 보완하도록 설계된 지능형 RAG 아키텍처 입니다.
+## 🧪 Final SOTA Architecture & Result
+수많은 실험 끝에 도달한 최종 파이프라인 (실험-8번)은 검색 엔진의 한계와 LLM의 불안정성을 상호 보완하도록 설계된 지능형 RAG 아키텍처 입니다. <br>
 <img width="2816" height="1536" alt="Image" src="https://github.com/user-attachments/assets/aa4040b3-88b0-477d-8bf9-71469221c1a4" /> <br>
 
 ### 1. 지능형 라우터
@@ -198,22 +227,19 @@
 ### 5. 자가 검증 기반 생성기
 - `gpt-4o` 모델을 활용해 구어체 답변을 생성합니다. 이때 프롬프트 엔지니어링을 통해 LLM 의 내재 지식 맹신을 차단하고, 검색된 문서에만 근거하도록 강제하는 '자가 검증(Self-Correction)' 을 거쳐 최종 출력문을 반환합니다.
 
+### 🏆 Final Performance & Leaderboard
+- MAP (Mean Average Precision) : 0.9242 
+- MRR (Mean Reciprocal Rank): 0.9318
+
+<img width="980" height="288" alt="Image" src="https://github.com/user-attachments/assets/9c4bdf7d-1810-4082-af41-ad5fac36c439" /> <br>
+Rank: 🥇1st
+
 
 <a id="troubleshooting-engineering"></a>
 
 ## 🛠️ Troubleshooting & Engineering
-프로젝트 팀장으로서 단순한 일정 관리를 넘어, 기술적 병목 현상을 제거하고 개발 효율을 극대화하기 위한 `협업시스템` 을 설계했습니다.
 
-### GitHub 기반 코드 버전 관리
-GitHub 작업 레포를 만들어 Contributors 로 팀원을 초대하고, 레포에 존재하는 Push, Merge 규칙을 "1명 이상의 작업자가 승인 시 Merge" 라는 항목을 부여하여 모든 팀원이 코드를 실시간으로 관리할 수 있게 레포 관리를 주도했습니다. <br>
-[GitHub 작업레포](https://github.com/wlstjd6524/LangchainRag_01)
 
-### 팀원간 정보 격차 관리 및 함께 성장하는 프로젝트 방향성 수립
-Notion 을 활용해 도메인 지식을 관리하고, Slack 을 통해 팀원에게 프로젝트간 이행해야 할 규칙들을 명시함으로써 팀원 간의 정보 격차를 해소하고 함께 성장하는 프로젝트 목표를 수립하고자 노력하였습니다. <br>
-또한 텍스트로만 주고받는 정보는 인지에 한계가 있다고 판단하여 프로젝트 진행상황 및 일정을 고려하여 Zoom 으로 실시간으로 공유하고자 하였습니다. <br>
-[Notion](https://www.notion.so/ESG-Tool-23d6325e11938098aa97e22ed903393b)
-
-<a id="retrospective-futurework"></a>
 
 ## 📈 Retrospective & Future Work
 ### 📌 회고
