@@ -1,4 +1,4 @@
-# Information Retrieval - Scientific Knowledge Question Answering
+# 👨‍🔬 Information Retrieval - Scientific Knowledge Question Answering
 목적 : 질문과 이전 대화 히스토리를 보고 참고할 문서를 검색엔진에서 추출 후 이를 활용하여 질문에 적합한 대답을 생성하는 태스크 구현
 
 ## 👨‍👧‍👦 Team 
