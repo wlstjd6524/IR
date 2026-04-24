@@ -100,6 +100,8 @@
 ## 📂 ReadME Index 
 [🎯 Project Overview (프로젝트 개요 및 목표)](#project-overview) <br>
 
+[⏱️ Project Duration & 🔧 Tech Stack (기간 및 기술스택)](#projectduration-techstack) <br>
+
 [📊 Data Analysis & Hypothesis (데이터 분석 및 실험 방향성 설정)](#data-analysis) <br>
 
 [🚀 Experimental Progression (실험 과정 및 빌드업)](#experimental-progression) <br>
@@ -107,6 +109,8 @@
 [🧪 Final SOTA Architecture & Result (핵심 실험과 최종 아키텍처 및 최종결과)](#final-sota-architecture) <br>
 
 [🛠️ Troubleshooting & Engineering (문제 해결 및 인프라 안정화)](#troubleshooting-engineering) <br>
+
+[👥 Team Leadership & Management (팀 리더십 및 협업)](#teamleadership-management) <br>
 
 [📈 Retrospective & Future Work (회고 및 향후계획)](#retrospective-futurework)
 
@@ -125,6 +129,25 @@
   - MRR : LLM 의 토큰 비용을 최소화하고 처리 속도를 높이기 위해, 가장 핵심이 되는 정답 문서를 검색 결과 최상단에 노출시키는 로직 최적화
   - MAP : 복합적인 과학 지식 질문에 대응하기 위해, 단일 문서가 아닌 답변에 필요한 여러 문서를 노이즈 없이 빠짐없이 추출해내는 능력 검증
 
+
+<a id="projectduration-techstack"></a>
+
+## ⏱️ Project Duration & 🔧 Tech Stack
+### ⏱️ Project Duration
+- 2026.03.25 ~ 2026.03.31
+
+### 🔧 Tech Stack
+| Category | Tech Stack |
+| :--- | :--- |
+| **Language** | Python 3.10 |
+| **RAG Framework** | HuggingFace, sentence-transformers |
+| **Search Engine** | Elasticsearch 8.x (Dense & Sparse Hybrid Search) |
+| **NLP Tool**| kiwipiepy (KiWi 형태소 분석기) |
+| **LLM & Embedding - Generation** | gpt-4o, gpt-4o-mini, Solar |
+| **LLM & Embedding - Retrieval** | BAAI/bge-m3 (Embedding) |
+| **LLM & Embedding - Reranking** | BAAI/bge-reranker-v2-m3 (Cross-Encoder) |
+| **Data Analysis** | Pandas, Numpy, Scikit-learn |
+| **Environment** | Ubuntu OS, Local GPU Server(CUDA - RTX3070) |
 
 <a id="data-analysis"></a>
 
@@ -261,6 +284,18 @@ Rank: 🥇1st
 #### 인사이트
 하이퍼파라미터 튜닝 시 편견이나 직관에 의존하는 것의 위험성을 배웠던 것 같습니다. RAG 시스템의 앙상블 결합에서는 각 모듈이 가진 장점을 훼손하지 않는 안정적인 밸런스를 유지하는 것이 최종 시너지를 극대화하는 가장 확실한 방법임을 Score 지표를 통해 확인할 수 있었습니다.
 
+
+<a id="teamleadership-management"></a>
+
+## 👥 Team Leadership & Management
+코드 병합 중심의 개발보다, <b>실험 결과와 인사이트의 병합</b> 이 중요한 프로젝트 특성에 맞춰 다음과 같은 엄격한 연구 협업 룰을 세팅하고 리드했습니다.
+
+1. 1일 1회 리더보드 제출 : 완벽함을 챙기려고 매번 실험만 반복하는 것을 방지하고, 매일 정량적 지표를 확인하면서 파이프라인의 방향성을 수정하도록 강제했습니다.
+2. 데이터 기반 소통 규칙 : 추상적인 텍스트 공유를 금지하고, EDA 결과나 실험 인사이트를 Slack 공유할 때 시각화 된 데이터를 첨부하도록 규정하여 팀 내 커뮤니케이션의 객관성을 확보했습니다.
+3. 프로젝트 인사이트 공유 규칙 : 매일 수업 정규 시간 종료 전, 각자가 개별적으로 파이프라인 실험 결과와 성능 향상 로직을 투명하게 공유하여, 성공적인 실험 요소들이 팀원 전체의 파이프라인에 참고할 수 있도록 리드했습니다.
+
+
+<a id="retrospective-futurework"></a>
 
 ## 📈 Retrospective & Future Work
 ### 📌 회고
